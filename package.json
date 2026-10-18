@@ -1,0 +1,61 @@
+{
+  "name": "@coho-cms/react",
+  "version": "0.1.0-alpha.6",
+  "description": "React components for Coho CMS content: images resized at the edge, and links to download assets.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "node --test test/*.test.ts",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {
+    "@coho-cms/delivery": "^0.1.0-alpha.6",
+    "react": ">=18"
+  },
+  "devDependencies": {
+    "@babel/core": "8.0.7",
+    "@babel/eslint-parser": "8.0.7",
+    "@coho-cms/delivery": "0.1.0-alpha.6",
+    "@stylistic/eslint-plugin": "5.10.0",
+    "@types/node": "24.19.0",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "eslint": "10.13.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "7.0.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coho-cms/coho-react.git"
+  },
+  "homepage": "https://github.com/coho-cms/coho-react#readme",
+  "keywords": [
+    "coho",
+    "cms",
+    "headless",
+    "react",
+    "nextjs",
+    "images"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
+}
