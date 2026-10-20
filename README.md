@@ -4,10 +4,8 @@ React components for Coho CMS content: images resized at the edge, and links to 
 assets. They render on the server and in the browser alike, with no request of their own,
 so they work in Next.js server components, client components, and any other React app.
 
-**In testing.** Releases are alphas on npm, under the `alpha` dist-tag.
-
 ```bash
-npm install @coho-cms/react@alpha @coho-cms/delivery@alpha
+npm install @coho-cms/react @coho-cms/delivery
 ```
 
 ## Images
@@ -81,10 +79,12 @@ four-space indents.
 
 ## Publishing
 
-Run the **Publish** workflow, naming the dist-tag (`alpha` for now). It checks, builds and
-publishes the version in `package.json`, which cannot be published twice. Keep the
-version in step with `@coho-cms/delivery`, and the peer range on the delivery version
-whose asset helpers it uses.
+Run the **Publish** workflow, naming the dist-tag: `latest` for a release, or `alpha` for a
+prerelease such as `0.2.0-alpha.1`, which `latest` must never point at. It checks, builds
+and publishes the version in `package.json`, which cannot be published twice; then tag the
+release commit, such as `v0.1.1`. Keep the version in step with `@coho-cms/delivery`,
+publish that first, and keep the peer range on the delivery version whose asset helpers
+this uses.
 
 ## License
 

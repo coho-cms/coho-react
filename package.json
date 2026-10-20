@@ -1,6 +1,6 @@
 {
   "name": "@coho-cms/react",
-  "version": "0.1.0-alpha.6",
+  "version": "0.1.0",
   "description": "React components for Coho CMS content: images resized at the edge, and links to download assets.",
   "license": "Apache-2.0",
   "type": "module",
@@ -26,13 +26,13 @@
     "prepack": "npm run build"
   },
   "peerDependencies": {
-    "@coho-cms/delivery": "^0.1.0-alpha.6",
+    "@coho-cms/delivery": "^0.1.0",
     "react": ">=18"
   },
   "devDependencies": {
     "@babel/core": "8.0.7",
     "@babel/eslint-parser": "8.0.7",
-    "@coho-cms/delivery": "0.1.0-alpha.6",
+    "@coho-cms/delivery": "0.1.0",
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/node": "24.19.0",
     "@types/react": "19.3.0",
