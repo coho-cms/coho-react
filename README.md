@@ -79,12 +79,16 @@ four-space indents.
 
 ## Publishing
 
-Run the **Publish** workflow, naming the dist-tag: `latest` for a release, or `alpha` for a
-prerelease such as `0.2.0-alpha.1`, which `latest` must never point at. It checks, builds
-and publishes the version in `package.json`, which cannot be published twice; then tag the
-release commit, such as `v0.1.1`. Keep the version in step with `@coho-cms/delivery`,
-publish that first, and keep the peer range on the delivery version whose asset helpers
-this uses.
+Bump the version in `package.json`, merge, and push a release tag at the release commit:
+`release-v` and the version, such as `release-v2026.1.1`. It runs the **Publish**
+workflow, which takes the version from the tag, checks, builds and publishes it: under
+`latest` for a release, or under the prerelease's name for one such as
+`release-v2026.2.0-alpha.1`, so `latest` never points at a prerelease. A version cannot be
+published twice. Keep the version in step with `@coho-cms/delivery`, publish that first,
+and keep the peer range on the delivery version whose asset helpers this uses.
+
+There is no npm token: the package has this repository's `publish.yml` as its trusted
+publisher on npmjs.com.
 
 ## License
 

@@ -1,15 +1,18 @@
 name: Publish
 
-# Publishes @coho-cms/react to npm at the version in package.json. Keep it in step with
-# @coho-cms/delivery: publish the delivery version this one's peer range names first.
-# A version cannot be published twice, so every fix is a new version.
+# Publishes @coho-cms/react to npm. Keep it in step with @coho-cms/delivery: publish
+# the delivery version this one's peer range names first. Pushing a release tag runs
+# it: release-v2026.1.0 publishes 2026.1.0 under latest, and release-v2026.2.0-alpha.1
+# publishes 2026.2.0-alpha.1 under alpha. A version cannot be published twice, so
+# every fix is a new version.
+#
+# There is no npm token: the package names this repository and this workflow file as
+# its trusted publisher on npmjs.com, and npm trades the job's OIDC token for a
+# short-lived publish credential. Renaming this file breaks that until the package's
+# trusted publisher is updated to match.
 on:
-  workflow_dispatch:
-    inputs:
-      tag:
-        description: The dist-tag to publish under. Prereleases need one other than latest.
-        required: true
-        default: alpha
+  push:
+    tags: ['release-v*']
 
 permissions:
   contents: read
@@ -17,21 +20,35 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
-          registry-url: https://registry.npmjs.org
+      # Trusted publishing needs npm 11.5.1 or later, newer than some Node 24 releases bundle.
+      - run: npm install -g npm@latest
       - run: npm ci
+      # The tag reaches the shell as a variable, never pasted into the script. A
+      # prerelease goes under its first identifier, alpha for 2026.2.0-alpha.1, so
+      # latest never points at one.
+      - name: Take the version and dist-tag from the release tag
+        run: |
+          version="${TAG#release-v}"
+          case "$version" in
+            *-*) pre="${version#*-}"; dist_tag="${pre%%.*}" ;;
+            *) dist_tag=latest ;;
+          esac
+          npm version "$version" --no-git-tag-version --allow-same-version
+          echo "DIST_TAG=$dist_tag" >> "$GITHUB_ENV"
+        env:
+          TAG: ${{ github.ref_name }}
       - run: npm run build
       - run: npm run typecheck
       - run: npm run lint
       - run: npm test
-      # The tag reaches the shell as a variable, never pasted into the script.
       - name: Publish
-        run: npm publish --tag "$TAG"
-        env:
-          TAG: ${{ inputs.tag }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --tag "$DIST_TAG"
