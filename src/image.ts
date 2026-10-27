@@ -6,7 +6,21 @@ import type { Asset, ImageOptions, Linked } from '@coho-cms/delivery';
 /** The `<img>` attributes `CohoImage` sets itself from the asset. */
 type Derived = 'src' | 'srcSet' | 'width' | 'height';
 
-export interface CohoImageProps extends Omit<ComponentProps<'img'>, Derived>, Omit<ImageOptions, 'width' | 'height'>
+/**
+ * Image options this component does not pass on. `width` and `height` are the shown
+ * size, which it derives.
+ *
+ * ⚠️ `background` is here because the edge stopped honouring `bg` on 2026-10-27 — it
+ * was worth about seventeen million cache keys for one image — and the colour is now a
+ * setting on the transform. The installed `@coho-cms/delivery` still declares the
+ * field, so without naming it here a caller could still pass `background` and, since
+ * this component no longer destructures it, it would land in `...img` and be spread
+ * onto the `<img>` as a stray DOM attribute. It stays valid, and redundant, once the
+ * dependency is bumped to an SDK without the field.
+ */
+type NotPassed = 'width' | 'height' | 'background';
+
+export interface CohoImageProps extends Omit<ComponentProps<'img'>, Derived>, Omit<ImageOptions, NotPassed>
 {
     /**
      * The asset to show: an entry's image field, as delivery returns it. Nothing is
@@ -47,7 +61,7 @@ export interface CohoImageProps extends Omit<ComponentProps<'img'>, Derived>, Om
  */
 export function CohoImage(props: CohoImageProps): ReactElement | null
 {
-    const { src: asset, width, height, fit, format = 'auto', quality, background, widths, sizes, ...img } = props;
+    const { src: asset, width, height, fit, format = 'auto', quality, widths, sizes, ...img } = props;
     if (asset === null || asset === undefined || !isResolved(asset)) return null;
 
     const natural = asset.file;
@@ -58,7 +72,7 @@ export function CohoImage(props: CohoImageProps): ReactElement | null
             ? Math.round((shownWidth * natural.height) / natural.width)
             : undefined);
 
-    const options: ImageOptions = { width: shownWidth, height, fit, format, quality, background };
+    const options: ImageOptions = { width: shownWidth, height, fit, format, quality };
     const candidates = asset.imageUrl === undefined
         ? undefined
         : sizes !== undefined
