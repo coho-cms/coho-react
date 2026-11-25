@@ -50,9 +50,6 @@ The link's text is its children, or the asset's title, or its filename. It downl
 file under its own name; `download={false}` opens it in the browser instead. It carries
 the file's media type. Other props, such as `className`, go to the `<a>`.
 
-⚠️ Downloading needs the asset CDN to send the file as an attachment, which it does not do
-yet: until it does, the link opens the file. The link needs no change when it starts to.
-
 ## Building your own
 
 The components are thin. The URLs come from `imageUrl`, `srcset` and `downloadUrl` in
